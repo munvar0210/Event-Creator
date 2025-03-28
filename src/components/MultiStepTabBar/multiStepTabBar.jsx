@@ -7,7 +7,7 @@ import {
   ActiveTabLine,
 } from "./multiStepTabBarStyles";
 
-const MultiStepTabBar = ({ currentStep, steps }) => {
+const MultiStepTabBar = ({ currentStep, steps, isEditMode = false }) => {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -41,6 +41,19 @@ const MultiStepTabBar = ({ currentStep, steps }) => {
 
   return (
     <TabContainer>
+      <div
+        style={{
+          position: "absolute",
+          top: "-30px",
+          left: "0",
+          fontWeight: "bold",
+          color: "#4a90e2",
+          display: isEditMode ? "block" : "none",
+        }}
+      >
+        Edit Mode
+      </div>
+
       {steps.map((step, index) => (
         <TabItem key={index}>
           <TabLabel

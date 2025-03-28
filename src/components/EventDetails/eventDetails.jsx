@@ -14,7 +14,7 @@ import {
   ErrorMessage,
 } from "./eventDetailsStyles";
 
-const EventDetails = ({ onNext, onBack, initialData }) => {
+const EventDetails = ({ onNext, onBack, initialData, isEditMode = false }) => {
   // Use useMemo to avoid recreating defaultValues on each render
   const defaultValues = useMemo(
     () => ({
@@ -85,7 +85,9 @@ const EventDetails = ({ onNext, onBack, initialData }) => {
 
   return (
     <FormContainer>
-      <FormHeading>Event Details</FormHeading>
+      <FormHeading>
+        {isEditMode ? "Edit Event Details" : "Event Details"}
+      </FormHeading>
 
       <FormGroup>
         <Label htmlFor="event-start-date-time">Start Date and Time *</Label>

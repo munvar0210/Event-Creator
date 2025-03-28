@@ -19,7 +19,12 @@ import {
   InstructorTitle,
 } from "./instructorDetailsStyles";
 
-const InstructorDetails = ({ onNext, onBack, initialData }) => {
+const InstructorDetails = ({
+  onNext,
+  onBack,
+  initialData,
+  isEditMode = false,
+}) => {
   // Define a single instructor object as default using useMemo
   const defaultInstructor = useMemo(
     () => ({
@@ -80,7 +85,9 @@ const InstructorDetails = ({ onNext, onBack, initialData }) => {
 
   return (
     <FormContainer>
-      <FormHeading>Instructor Details</FormHeading>
+      <FormHeading>
+        {isEditMode ? "Edit Instructor Details" : "Instructor Details"}
+      </FormHeading>
 
       {fields.map((item, index) => (
         <InstructorContainer key={item.id}>

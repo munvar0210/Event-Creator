@@ -17,7 +17,12 @@ import {
   ErrorMessage,
 } from "./paymentInformationStyles";
 
-const PaymentInformation = ({ onSubmit, onBack, initialData }) => {
+const PaymentInformation = ({
+  onSubmit,
+  onBack,
+  initialData,
+  isEditMode = false,
+}) => {
   // Initialize state values
   const [publishToggle, setPublishToggle] = useState(false);
   const [paidToggle, setPaidToggle] = useState(false);
@@ -25,7 +30,6 @@ const PaymentInformation = ({ onSubmit, onBack, initialData }) => {
   const [error, setError] = useState("");
 
   // Update state from initialData when component mounts or initialData changes
-  // Update state only when initialData changes and is not null
   useEffect(() => {
     if (initialData) {
       setPublishToggle(
@@ -84,7 +88,9 @@ const PaymentInformation = ({ onSubmit, onBack, initialData }) => {
 
   return (
     <FormContainer onSubmit={handleFormSubmit}>
-      <FormHeading>Payment Information</FormHeading>
+      <FormHeading>
+        {isEditMode ? "Edit Payment Information" : "Payment Information"}
+      </FormHeading>
 
       <ToggleGroup>
         <ToggleLabel htmlFor="event-publish">Publish</ToggleLabel>
@@ -130,8 +136,8 @@ const PaymentInformation = ({ onSubmit, onBack, initialData }) => {
         <BackButton type="button" onClick={onBack} aria-label="Go back">
           ← Back
         </BackButton>
-        <SaveButton type="submit" aria-label="Save form">
-          Save
+        <SaveButton type="submit" aria-label={isEditMode ? "Update" : "Save"}>
+          {isEditMode ? "Update" : "Save"}
         </SaveButton>
       </ButtonContainer>
     </FormContainer>

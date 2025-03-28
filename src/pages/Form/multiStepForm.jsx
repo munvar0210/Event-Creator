@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MultiStepTabBar from "../../components/MultiStepTabBar/multiStepTabBar";
 import BasicInformation from "../../components/BasicInformation/basicInformation";
 import InstructorDetails from "../../components/InstructorDetails/instructorDetails";
@@ -6,17 +6,30 @@ import EventDetails from "../../components/EventDetails/eventDetails";
 import PaymentInformation from "../../components/PaymentInformation/paymentInformation";
 import { FormWrapper } from "./multiStepFormStyles";
 
-const MultiStepForm = () => {
+const MultiStepForm = ({ editData = null, onEditComplete }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({});
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
 
+  // Add steps array
   const steps = [
     "Basic Information",
     "Instructors Details",
     "Event Details",
     "Payment Information",
   ];
+
+  // Initialize form with editData if provided
+  useEffect(() => {
+    if (editData) {
+      setFormData(editData);
+      setIsEditMode(true);
+    } else {
+      setFormData({});
+      setIsEditMode(false);
+    }
+  }, [editData]);
 
   const handleNext = (data) => {
     setFormData({ ...formData, ...data });
@@ -31,14 +44,27 @@ const MultiStepForm = () => {
 
   const handleSubmit = (finalData) => {
     const completeFormData = { ...formData, ...finalData };
-    console.log("Form submitted with data:", completeFormData);
-    // Here you would typically send the data to your API
-    alert("Form submitted successfully!");
+
+    if (isEditMode) {
+      console.log("Form edited with data:", completeFormData);
+      // Here you would typically update the data via your API
+      alert("Form updated successfully!");
+
+      // Call the onEditComplete callback if provided
+      if (onEditComplete) {
+        onEditComplete(completeFormData);
+      }
+    } else {
+      console.log("Form submitted with data:", completeFormData);
+      // Here you would typically send the data to your API
+      alert("Form submitted successfully!");
+    }
 
     // Reset form and go back to first step
     setFormData({});
     setCurrentStep(0);
     setIsFormSubmitted(true);
+    setIsEditMode(false);
   };
 
   // Reset isFormSubmitted when starting a new form
@@ -56,6 +82,7 @@ const MultiStepForm = () => {
             initialData={formData}
             isFormSubmitted={isFormSubmitted}
             onStartNewForm={handleStartNewForm}
+            isEditMode={isEditMode}
           />
         );
       case 1:
@@ -64,6 +91,7 @@ const MultiStepForm = () => {
             onNext={handleNext}
             onBack={handleBack}
             initialData={formData}
+            isEditMode={isEditMode}
           />
         );
       case 2:
@@ -72,6 +100,7 @@ const MultiStepForm = () => {
             onNext={handleNext}
             onBack={handleBack}
             initialData={formData}
+            isEditMode={isEditMode}
           />
         );
       case 3:
@@ -80,6 +109,7 @@ const MultiStepForm = () => {
             onSubmit={handleSubmit}
             onBack={handleBack}
             initialData={formData}
+            isEditMode={isEditMode}
           />
         );
       default:
@@ -89,7 +119,11 @@ const MultiStepForm = () => {
 
   return (
     <FormWrapper>
-      <MultiStepTabBar currentStep={currentStep} steps={steps} />
+      <MultiStepTabBar
+        currentStep={currentStep}
+        steps={steps}
+        isEditMode={isEditMode}
+      />
       {renderStep()}
     </FormWrapper>
   );
