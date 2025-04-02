@@ -40,6 +40,7 @@ const BasicInformation = ({
   initialData,
   isFormSubmitted,
   onStartNewForm,
+  isEditMode = false,
 }) => {
   // Instead of useFieldArray, use a simpler approach with direct state management
   const [learningItems, setLearningItems] = useState([""]);
@@ -141,7 +142,9 @@ const BasicInformation = ({
 
   return (
     <FormContainer>
-      <FormHeading>Basic Information</FormHeading>
+      <FormHeading>
+        {isEditMode ? "Edit Basic Information" : "Basic Information"}
+      </FormHeading>
 
       <FormGroup>
         <StyledLabel htmlFor="event-image">Image *</StyledLabel>
@@ -175,7 +178,11 @@ const BasicInformation = ({
                 <ImagePreviewContainer>
                   <ImageWrapper>
                     <ImagePreview
-                      src={URL.createObjectURL(imageValue)}
+                      src={
+                        typeof imageValue === "string"
+                          ? imageValue
+                          : URL.createObjectURL(imageValue)
+                      }
                       alt="Preview"
                     />
                     <DeleteImageButton
